@@ -28,37 +28,34 @@ def select_number():
 
 def make_quiz(n):
     if n == 2:
-        quiz = [select_operator()], [select_number(), select_number()]
+        quiz = [select_number(), select_operator(), select_number()]
         val = eval_quiz(quiz)
         if val < 0:
             quiz, val = make_quiz(n)
     else:
         quiz, val = make_quiz(n - 1)
-        operators, numbers = quiz
         op, number = select_operator(), select_number()
         while op(val, number) < 0:
             op, number = select_operator(), select_number()
-        operators.append(op)
-        numbers.append(number)
+        quiz = [number, op] + quiz
     return quiz, val
 
 
 def eval_quiz(quiz):
-    operators, numbers = quiz
-    numbers = numbers[:]
-    ret = numbers.pop()
-    for op in operators:
-        ret = op(ret, numbers.pop())
+    quiz1 = quiz[:]
+    ret = quiz1.pop()
+    while quiz1:
+        op = quiz1.pop()
+        ret = op(ret, quiz1.pop())
     return ret
 
 
 def quiz_to_str(quiz):
-    operators, numbers = quiz
-    numbers = numbers[:]
-    ret = str(numbers.pop())
-    for op in operators:
-        ret += ' %s ' % op_str[op]
-        ret += str(numbers.pop())
+    quiz1 = quiz[:]
+    ret = str(quiz1.pop())
+    while quiz1:
+        ret += ' %s ' % op_str[quiz1.pop()]
+        ret += str(quiz1.pop())
     return ret + ' ='
 
 
