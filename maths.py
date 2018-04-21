@@ -7,7 +7,7 @@ from docx.shared import Pt
 from docx.enum.text import WD_LINE_SPACING, WD_BREAK
 
 operators = [operator.add, operator.sub]
-numbers = list(range(1, 21))
+numbers = list(range(1, 100))
 op_str = {
     operator.add: '+',
     operator.sub: '-'
@@ -20,17 +20,18 @@ def select_operator():
 
 
 def select_number():
-    n = randint(0, 9)
-    if n < 8:
-        return numbers[randint(0, 8)]
-    return randint(9, numbers[-1])
+    # n = randint(0, 9)
+    # if n < 8:
+    #     return numbers[randint(0, 8)]
+    # return randint(9, numbers[-1])
+    return numbers[randint(0, len(numbers) - 1)]
 
 
 def make_quiz(n):
     if n == 2:
         quiz = [select_number(), select_operator(), select_number()]
         val = eval_quiz(quiz)
-        if val < 0:
+        if val < 0 or val > 100:
             quiz, val = make_quiz(n)
     else:
         quiz, val = make_quiz(n - 1)
@@ -62,8 +63,8 @@ def quiz_to_str(quiz):
 def make_sheet(num):
     quiz_list = []
     for i in range(num):
-        num = randint(0, 6) < 5 and 2 or 3
-        q, _ = make_quiz(num)
+        n = 2#randint(0, 6) < 5 and 2 or 3
+        q, _ = make_quiz(n)
         quiz_list.append(q)
     return quiz_list
 
